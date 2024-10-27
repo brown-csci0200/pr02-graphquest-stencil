@@ -1,22 +1,22 @@
 package sol;
 
 import src.*;
-import java.util.HashMap;
-import java.util.LinkedList;
+
+import java.util.*;
 
 
-public class NodeEdgeGraph implements IGraph{
-    public String name;
-    public HashMap<String, Node> allNodes;
+public class NodeEdgeGraph implements IGraph {
+    public String name;                      // Name of this graph (useful for testing)
+    public HashMap<String, Node> allNodes;  // Map of label -> node object
 
     // ---------------------------------------------
     // the Node class
     static class Node {
-        String descr;  // a descriptive name for the node
+        String label;  // a descriptive name for the node
         LinkedList<Node> nextNodes; // the nodes that this node can get to
 
-        public Node(String descr) {
-            this.descr = descr;
+        public Node(String label) {
+            this.label = label;
             this.nextNodes = new LinkedList<>();
         }
 
@@ -24,8 +24,8 @@ public class NodeEdgeGraph implements IGraph{
             this.nextNodes.add(toNode);
         }
     }
-    public NodeEdgeGraph(String name) {
-        this.name = name;
+    public NodeEdgeGraph(String graphName) {
+        this.name = graphName;
         this.allNodes = new HashMap<String, Node>();
     }
 
@@ -33,7 +33,7 @@ public class NodeEdgeGraph implements IGraph{
      * Method to retrieve the Node object for a name
      *
      * @param label the name of the node to find
-     * @return the Node that has label as its description
+     * @return the Node that has label
      */
     public Node getNode(String label) {
         return this.allNodes.get(label);
@@ -43,45 +43,50 @@ public class NodeEdgeGraph implements IGraph{
      * Method to add a new node with the given description. An exception will
      * be thrown if the description already names a node in the graph
      *
-     * @param descr the text description or label to associate with the node
+     * @param label the text description or label to associate with the node
      * @throws NodeNameExistsException if that description is already
      * associated with a node in the graph
      */
-    public void addNode(String descr) throws NodeNameExistsException {
-        if (this.allNodes.containsKey(descr))
-            throw new NodeNameExistsException(descr);
-        addNodeUnchecked(descr);
+    public void addNode(String label) throws NodeNameExistsException {
+        if (this.allNodes.containsKey(label)) {
+            throw new NodeNameExistsException(label);
+        }
+        this.makeNewNode(label);
     }
 
     /**
-     * An internal method to add a node without checking whether it exists.
-     * This is useful for internally avoiding the exception handling when
-     * we already know the node doesn't exist.
+     * Helper method to add a new node
      *
-     * @param descr the text description or label to associate with the node
+     * @param label the text description or label to associate with the node
      * @return the (new) node associated with the given description
      */
-    private Node addNodeUnchecked(String descr) {
-        Node newNode = new Node(descr);
-        this.allNodes.put(descr, newNode);
+    private Node makeNewNode(String label) {
+        Node newNode = new Node(label);
+        this.allNodes.put(label, newNode);
         return newNode;
     }
 
     /**
      * Method to add a directed edge between the nodes associated with the given
-     * descriptions. If descr1 and descr2 are not already
+     * descriptions. If label1 and label2 are not already
      * valid node labels in the graph, those nodes are also created.
      * If the edge already exists, no changes are made
      * (and no exceptions or warnings are raised)
      *
-     * @param descr1 the source node for the edge
-     * @param descr2 the target node for the edge
+     * @param label1 the source node for the edge
+     * @param label2 the target node for the edge
      */
-    public void addDirectedEdge(String descr1, String descr2) {
-        Node node1 = this.allNodes.get(descr1);
-        if (node1 == null) node1 = this.addNodeUnchecked(descr1);
-        Node node2 = this.allNodes.get(descr2);
-        if (node2 == null) node2 = this.addNodeUnchecked(descr2);
+    public void addDirectedEdge(String label1, String label2) {
+        Node node1 = this.allNodes.get(label1);
+        if (node1 == null) { // If this node doesn't exist, create it
+            node1 = this.makeNewNode(label1);
+        }
+        Node node2 = this.allNodes.get(label2);
+        if (node2 == null) { // If this node doesn't exist, create it
+            node2 = this.makeNewNode(label2);
+        }
+
+        // Add an edge between the nodes
         if (!(node1.nextNodes.contains(node2))) {
             node1.addEdge(node2);
         }
@@ -90,35 +95,50 @@ public class NodeEdgeGraph implements IGraph{
     /**
      * Method to add an undirected edge between the nodes associated with the given
      * descriptions. This is equivalent to adding two directed edges, one from
-     * descr1 to descr2, and another from descr2 to descr1.
-     * If descr1 and descr2 are not already valid node labels in the graph,
+     * label1 to label2, and another from label2 to label1.
+     * If label1 and label2 are not already valid node labels in the graph,
      * those nodes are also created.
      *
-     * @param descr1 the source node for the edge
-     * @param descr2 the target node for the edge
+     * @param label1 the source node for the edge
+     * @param label2 the target node for the edge
      */
-    public void addUndirectedEdge(String descr1, String descr2) {
-        this.addDirectedEdge(descr1, descr2);
-        this.addDirectedEdge(descr2, descr1);
+    public void addUndirectedEdge(String label1, String label2) {
+        this.addDirectedEdge(label1, label2);
+        this.addDirectedEdge(label2, label1);
     }
 
     /**
-     * Method to count how many nodes have edges to themselves
+     * Method to return a LinkedList of the descriptors of the nodes
+     * that can be reached on a direct edge from this node.
+     * Assumes that nodeLabel is a valid node label in the graph.
      *
-     * @return the number of nodes that have edges to themselves
+     * @param nodeLabel the description for the source node
+     * @return LinkedList of descriptions for nodes to which nodeLabel has an edge
      */
-    public int countSelfEdges() {
-        return 0; // Implement this!
+    public List<String> getNeighbors(String nodeLabel) {
+        List<String> neighbors = new LinkedList<String>();
+        Node theNode = this.getNode(nodeLabel);
+        if (theNode == null) {
+            throw new IllegalArgumentException("Node " + nodeLabel + " does not exist");
+        }
+
+        for (Node n : theNode.nextNodes) {
+            neighbors.add(n.label);
+        }
+
+        return neighbors;
     }
 
     /**
-     * Method to check whether a given node has edges to every other node (with or without an edge to itself).
-     * Assumes that fromNodeLabel is a valid node label in the graph.
+     * Get a list of all node names
      *
-     * @param fromNodeLabel the node to check
-     * @return true if fromNodeLabel has an edge to every other node, otherwise false
+     * @return return the list of all node labels in the graph
      */
-    public boolean reachesAllOthers(String fromNodeLabel) {
-        return false; // Implement this!
+    public List<String> getNodes() {
+        List<String> result = new LinkedList<>();
+        for (String key : this.allNodes.keySet()) {
+            result.add(key);
+        }
+        return result;
     }
 }

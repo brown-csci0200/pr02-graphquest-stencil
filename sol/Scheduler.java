@@ -18,6 +18,8 @@ public class Scheduler {
      * @return boolean indicating whether the proposed allocation is valid
      */
     public static boolean checkValidity(IGraph theGraph, ArrayList<HashSet<String>> proposedAlloc) {
+        // NON-TODO:  You'll implement this method in HW4 (in Python), so don't implement it now!
+        // For now, we just want you to plan how you *would* implement it given a graph that implements IGraph.
         return false;
     }
 
@@ -34,6 +36,8 @@ public class Scheduler {
      */
     public static ArrayList<HashSet<String>> findSchedule(IGraph theGraph)
             throws NoScheduleException {
+        // NON-TODO:  You'll implement this method in HW4 (in Python), so don't implement it now!
+        // For now, we just want you to plan how you *would* implement it given a graph that implements IGraph.
         return null;
     }
 }

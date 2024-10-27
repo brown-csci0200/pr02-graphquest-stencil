@@ -3,6 +3,7 @@ package test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import sol.EdgeArrayGraph;
 import sol.GraphUtils;
 import sol.IGraph;
 import sol.NodeEdgeGraph;
@@ -12,85 +13,81 @@ import src.NodeNameExistsException;
 import java.util.LinkedList;
 
 public class GraphUtilsTest {
-    // Assumes that graph will be empty, modifies it in-place
-    private void addSimpleGraphNodes(IGraph graph) throws NodeNameExistsException {
-        graph.addNode("node 1");
-        graph.addNode("node 2");
-        graph.addNode("node 3");
-        graph.addNode("node 4");
+
+    // Tip:  to save on typing, define node names as constants
+    // to use throughout our tests
+    // (the keyword "final" tells Java this variable won't ever change)
+    private final String n1 = "node 1";
+    private final String n2 = "node 2";
+    private final String n3 = "node 3";
+    private final String n4 = "node 4";
+    // Feel free to add more!
+
+
+
+    // Helper to create the graph n1 -> n2 -> n3
+    // (Assumes graph is empty at start)
+    private void makeSimpleGraph(IGraph g) throws NodeNameExistsException {
+        // Creates the graph n1 -> n2 -> n3
+        g.addNode(n1);
+        g.addNode(n2);
+        g.addNode(n3);
+        g.addDirectedEdge(n1, n2);
+        g.addDirectedEdge(n2, n3);
     }
 
-    // Assumes that graph will have nodes from `addSimpleGraphNodes`,
-    //     modifies it in-place
-    private void addSimpleGraphEdges(IGraph graph) {
-        graph.addDirectedEdge("node 1", "node 2");
-        graph.addDirectedEdge("node 2", "node 3");
+    // Demo: checking routes with hasRoute
+    @Test
+    public void testHasRoute()  {
+        NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
+        makeSimpleGraph(simpleGraph);
+
+        Assert.assertTrue(GraphUtils.hasRouteExample(simpleGraph, n1, n3));
+        Assert.assertFalse(GraphUtils.hasRouteExample(simpleGraph, n3, n1));
     }
 
-    // Assumes that graph will be empty, modifies it in-place
-    private void makeSimpleGraph(IGraph graph) throws NodeNameExistsException {
-        addSimpleGraphNodes(graph);
-        addSimpleGraphEdges(graph);
+    //
+    @Test
+    public void testGetRouteSimple() throws NoRouteException {
+        NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
+        makeSimpleGraph(simpleGraph);
+
+        LinkedList<String> route = GraphUtils.getRoute(simpleGraph, n1, n3);
+
+        // Expected path:  n1 -> n2 -> n3
+        LinkedList<String> expectedRoute = new LinkedList<>();
+        expectedRoute.add(n1);
+        expectedRoute.add(n2);
+        expectedRoute.add(n3);
+
+        Assert.assertEquals(expectedRoute, route);
     }
 
     @Test
-    public void testGetRouteSimple(){
-        try {
-            NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
-            makeSimpleGraph(simpleGraph);
-
-            String fromNode = "node 1";
-            String toNode = "node 3";
-            LinkedList<String> route = GraphUtils.getRoute(simpleGraph, fromNode, toNode);
-
-            LinkedList<String> expectedRoute = new LinkedList<>();
-            expectedRoute.add("node 1");
-            expectedRoute.add("node 2");
-            expectedRoute.add("node 3");
-
-            Assert.assertEquals(expectedRoute, route);
-        }
-        catch (NodeNameExistsException e) {
-            // fail() automatically stops and fails the current test with an error message
-            Assert.fail("Could not create graph to test");
-        } catch (NoRouteException e) {
-            Assert.fail("getRoute did not find a route");
-        }
+    public void testGetRouteSimpleNoRoute() throws NoRouteException {
+        NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
+        makeSimpleGraph(simpleGraph);
+        // Should be no route n3 -> n1
+        Assert.assertThrows(NoRouteException.class,
+                () -> GraphUtils.getRoute(simpleGraph, n3, n1));
     }
 
     @Test
-    public void testGetRouteSimpleNoRoute(){
-        try {
-            NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
-            makeSimpleGraph(simpleGraph);
-            String fromNode = "node 1";
-            String toNode = "node 4";
-            Assert.assertThrows(
-                    NoRouteException.class,
-                    () -> GraphUtils.getRoute(simpleGraph, fromNode, toNode));
-        }
-        catch (NodeNameExistsException e) {
-            Assert.fail("Could not create graph to test");
-        }
+    public void testGetRouteSimpleEdgeArray() throws NoRouteException {
+        EdgeArrayGraph simpleGraph = new EdgeArrayGraph("a graph");
+        makeSimpleGraph(simpleGraph);
+
+        LinkedList<String> route = GraphUtils.getRoute(simpleGraph, n1, n3);
+
+        LinkedList<String> expectedRoute = new LinkedList<>();
+        expectedRoute.add(n1);
+        expectedRoute.add(n2);
+        expectedRoute.add(n3);
+
+        Assert.assertEquals(expectedRoute, route);
     }
 
-    @Test
-    public void testCountSelfEdgesSimple() {
-        try {
-            IGraph basicGraph = new NodeEdgeGraph("a graph");
-            basicGraph.addNode("node 1");
-            basicGraph.addDirectedEdge("node 1", "node 1");
-            Assert.assertEquals(1, basicGraph.countSelfEdges());
-        } catch (NodeNameExistsException e) {
-            Assert.fail("Could not create graph to test");
-        }
-    }
 
-    @Test
-    public void testReachesAllOthersSimple(){
-        IGraph basicGraph = new NodeEdgeGraph("b graph");
-        basicGraph.addUndirectedEdge("node 1", "node 2");
-        Assert.assertTrue(basicGraph.reachesAllOthers("node 1"));
-        Assert.assertTrue(basicGraph.reachesAllOthers("node 2"));
-    }
+
+
 }

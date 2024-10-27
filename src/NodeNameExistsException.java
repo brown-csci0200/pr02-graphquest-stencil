@@ -1,6 +1,6 @@
 package src;
 
-public class NodeNameExistsException extends Exception {
+public class NodeNameExistsException extends IllegalArgumentException {
     public NodeNameExistsException() {
         super("Node name already exists");
     }

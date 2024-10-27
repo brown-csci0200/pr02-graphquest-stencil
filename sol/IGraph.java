@@ -2,12 +2,22 @@ package sol;
 
 import src.NodeNameExistsException;
 
-public interface IGraph {
-    void addNode(String descr) throws NodeNameExistsException;
-    void addDirectedEdge(String descr1, String descr2);
-    void addUndirectedEdge (String descr1, String descr2);
-    int countSelfEdges();
-    boolean reachesAllOthers(String fromNodeLabel);
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-    // Add additional functions below here for GraphUtils
+/**
+ * Interface for Graphs of different formats
+ *
+ * YOU SHOULD NOT NEED TO MODIFY THIS FILE.
+ * If you do, you MUST NOT change any of the methods listed here,
+ * which will break the autograder.  You MAY add new methods, if you want.
+ */
+public interface IGraph {
+    void addNode(String label);
+    void addDirectedEdge(String label1, String label2);
+    void addUndirectedEdge (String label1, String label2);
+
+    List<String> getNeighbors(String nodeLabel);
+    List<String> getNodes();
 }
