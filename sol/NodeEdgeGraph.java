@@ -4,7 +4,11 @@ import src.*;
 
 import java.util.*;
 
-
+/**
+ * Node-based representation for a graph
+ * YOU SHOULD NOT NEED TO MODIFY THIS FILE, though you MAY do so
+ * if you want to add any extra methods for part 2B (not required).
+ */
 public class NodeEdgeGraph implements IGraph {
     public String name;                      // Name of this graph (useful for testing)
     public HashMap<String, Node> allNodes;  // Map of label -> node object
@@ -115,8 +119,8 @@ public class NodeEdgeGraph implements IGraph {
      * @param nodeLabel the description for the source node
      * @return LinkedList of descriptions for nodes to which nodeLabel has an edge
      */
-    public List<String> getNeighbors(String nodeLabel) {
-        List<String> neighbors = new LinkedList<String>();
+    public Set<String> getNeighbors(String nodeLabel) {
+        Set<String> neighbors = new HashSet<String>();
         Node theNode = this.getNode(nodeLabel);
         if (theNode == null) {
             throw new IllegalArgumentException("Node " + nodeLabel + " does not exist");
@@ -134,8 +138,8 @@ public class NodeEdgeGraph implements IGraph {
      *
      * @return return the list of all node labels in the graph
      */
-    public List<String> getNodes() {
-        List<String> result = new LinkedList<>();
+    public Set<String> getAllNodes() {
+        Set<String> result = new HashSet<>();
         for (String key : this.allNodes.keySet()) {
             result.add(key);
         }

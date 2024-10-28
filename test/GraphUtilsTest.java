@@ -1,6 +1,7 @@
 package test;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import sol.EdgeArrayGraph;
@@ -11,6 +12,8 @@ import src.NoRouteException;
 import src.NodeNameExistsException;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class GraphUtilsTest {
 
@@ -27,7 +30,7 @@ public class GraphUtilsTest {
 
     // Helper to create the graph n1 -> n2 -> n3
     // (Assumes graph is empty at start)
-    private void makeSimpleGraph(IGraph g) throws NodeNameExistsException {
+    private void makeSimpleGraph(IGraph g) {
         // Creates the graph n1 -> n2 -> n3
         g.addNode(n1);
         g.addNode(n2);
@@ -35,6 +38,23 @@ public class GraphUtilsTest {
         g.addDirectedEdge(n1, n2);
         g.addDirectedEdge(n2, n3);
     }
+
+    // -------------------- TESTS FOR PART 1 ------------------------------------
+
+    // Demo: getting neighbors on a graph
+    @Test
+    public void testGetNeighbors() {
+        NodeEdgeGraph g = new NodeEdgeGraph("a graph");
+        g.addDirectedEdge("a", "b");
+        g.addDirectedEdge("a", "c");
+
+        Set<String> aNeighbors = g.getNeighbors("a");
+        Assert.assertTrue(aNeighbors.contains("b"));
+        Assert.assertFalse(aNeighbors.contains("d"));
+    }
+
+
+    // -------------------- TESTS FOR PART 2 ------------------------------------
 
     // Demo: checking routes with hasRoute
     @Test
@@ -46,7 +66,6 @@ public class GraphUtilsTest {
         Assert.assertFalse(GraphUtils.hasRouteExample(simpleGraph, n3, n1));
     }
 
-    //
     @Test
     public void testGetRouteSimple() throws NoRouteException {
         NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
@@ -60,9 +79,13 @@ public class GraphUtilsTest {
         expectedRoute.add(n2);
         expectedRoute.add(n3);
 
+        // Shorthand:  this line is equivalent to the previous three add()'s!
+        // expectedRoute.addAll(List.of(new String[]{n1, n2, n3}));
+
         Assert.assertEquals(expectedRoute, route);
     }
 
+    // Here's an example test for when a route is not found, which throws a NoRouteException
     @Test
     public void testGetRouteSimpleNoRoute() throws NoRouteException {
         NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
@@ -71,23 +94,5 @@ public class GraphUtilsTest {
         Assert.assertThrows(NoRouteException.class,
                 () -> GraphUtils.getRoute(simpleGraph, n3, n1));
     }
-
-    @Test
-    public void testGetRouteSimpleEdgeArray() throws NoRouteException {
-        EdgeArrayGraph simpleGraph = new EdgeArrayGraph("a graph");
-        makeSimpleGraph(simpleGraph);
-
-        LinkedList<String> route = GraphUtils.getRoute(simpleGraph, n1, n3);
-
-        LinkedList<String> expectedRoute = new LinkedList<>();
-        expectedRoute.add(n1);
-        expectedRoute.add(n2);
-        expectedRoute.add(n3);
-
-        Assert.assertEquals(expectedRoute, route);
-    }
-
-
-
 
 }

@@ -5,6 +5,7 @@ import src.NodeNameExistsException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class EdgeArrayGraph implements IGraph {
     String name;  // Name of the graph
@@ -66,7 +67,7 @@ public class EdgeArrayGraph implements IGraph {
      * @param nodeLabel the description for the source node
      * @return LinkedList of descriptions for nodes to which nodeLabel has an edge
      */
-    public List<String> getNeighbors(String nodeLabel) {
+    public Set<String> getNeighbors(String nodeLabel) {
         // TODO: Implement this!
         return null;
     }
@@ -76,7 +77,7 @@ public class EdgeArrayGraph implements IGraph {
      *
      * @return return the list of all node labels in the graph
      */
-    public List<String> getNodes() {
+    public Set<String> getAllNodes() {
         // TODO: Implement this!
         return null;
     }
