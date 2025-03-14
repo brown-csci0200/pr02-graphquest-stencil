@@ -5,11 +5,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import sol.IGraph;
-import sol.NodeEdgeGraph;
+import src.IGraph;
+import src.NodeEdgeGraph;
 import sol.Scheduler;
 import src.NoScheduleException;
-import src.NodeNameExistsException;
 
 /**
  * This class contains *examples* for using the Scheduler

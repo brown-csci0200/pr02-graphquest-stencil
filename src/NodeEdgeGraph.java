@@ -1,6 +1,4 @@
-package sol;
-
-import src.*;
+package src;
 
 import java.util.*;
 

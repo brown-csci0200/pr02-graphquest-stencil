@@ -1,18 +1,14 @@
 package test;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import sol.EdgeArrayGraph;
 import sol.GraphUtils;
-import sol.IGraph;
-import sol.NodeEdgeGraph;
+import src.IGraph;
+import src.NodeEdgeGraph;
 import src.NoRouteException;
-import src.NodeNameExistsException;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class GraphUtilsTest {
@@ -43,7 +39,7 @@ public class GraphUtilsTest {
 
     // Demo: getting neighbors on a graph
     @Test
-    public void testGetNeighbors() {
+    public void testGetNeighborsExample() {
         NodeEdgeGraph g = new NodeEdgeGraph("a graph");
         g.addDirectedEdge("a", "b");
         g.addDirectedEdge("a", "c");
@@ -58,7 +54,7 @@ public class GraphUtilsTest {
 
     // Demo: checking routes with hasRoute
     @Test
-    public void testHasRoute()  {
+    public void testHasRouteExample()  {
         NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
         makeSimpleGraph(simpleGraph);
 
@@ -67,7 +63,7 @@ public class GraphUtilsTest {
     }
 
     @Test
-    public void testGetRouteSimple() throws NoRouteException {
+    public void testGetRouteSimpleExample() throws NoRouteException {
         NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
         makeSimpleGraph(simpleGraph);
 
@@ -87,7 +83,7 @@ public class GraphUtilsTest {
 
     // Here's an example test for when a route is not found, which throws a NoRouteException
     @Test
-    public void testGetRouteSimpleNoRoute() throws NoRouteException {
+    public void testGetRouteSimpleNoRouteExample() throws NoRouteException {
         NodeEdgeGraph simpleGraph = new NodeEdgeGraph("a graph");
         makeSimpleGraph(simpleGraph);
         // Should be no route n3 -> n1

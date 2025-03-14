@@ -2,6 +2,7 @@ package sol;
 
 import java.util.*;
 
+import src.IGraph;
 import src.NoScheduleException;
 
 public class Scheduler {

@@ -1,10 +1,9 @@
 package sol;
 
+import src.IGraph;
 import src.NodeNameExistsException;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class EdgeArrayGraph implements IGraph {
