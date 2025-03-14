@@ -4,8 +4,7 @@ import java.util.*;
 
 /**
  * Node-based representation for a graph
- * YOU SHOULD NOT NEED TO MODIFY THIS FILE, though you MAY do so
- * if you want to add any extra methods for part 2B (not required).
+ * YOU SHOULD NOT NEED TO MODIFY THIS FILE
  */
 public class NodeEdgeGraph implements IGraph {
     public String name;                      // Name of this graph (useful for testing)

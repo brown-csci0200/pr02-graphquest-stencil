@@ -6,9 +6,7 @@ import java.util.Set;
 /**
  * Interface for Graphs of different formats
  *
- * YOU SHOULD NOT NEED TO MODIFY THIS FILE.
- * If you do, you MUST NOT change any of the methods listed here,
- * which will break the autograder.  You MAY add new methods, if you want.
+ * YOU SHOULD NOT MODIFY THIS FILE.
  */
 public interface IGraph {
     void addNode(String label);
